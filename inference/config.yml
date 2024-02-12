@@ -1,25 +1,25 @@
 OutputDir: keras/test
-
+DataDir: ../data
 Framework: keras
 ModelType: tiny
-ModelCkp: ../checkpoints/qkeras/qkeras_best_bs1024_e100_val0.1_lr0.01_acc88.7.h5
+ModelCkp: ../checkpoints/qkeras_v3_filter.h5
 
 BuildOptions:
   reset: 0
-  csim: 1
-  synth: 1
-  cosim: 0
+  csim: 1 # Simulate C++
+  synth: 1 # HLS
+  cosim: 0 # Simulate RTL not C++
   validation: 0
-  export: 1
-  vsynth: 1
+  export: 1 # Produce IP for further integration
+  vsynth: 1 # Logic synthesis
   fifo_opt: 1
 
 # Branch: external-weights-vivado-accelerator # TODO: Switch branches 
 Backend: VivadoAccelerator
 Interface: axi_stream # axi_lite, axi_stream, [axi_master]
 Driver: c
-Part: xczu49dr-ffvf1760-2-e
-Board: zcu216
+Part: xc7z020clg400-1 #xczu49dr-ffvf1760-2-e
+Board: pynq-z2 #zcu216
 ClockPeriod: 5 # 5ns (200 MHz)
 IOType: io_stream # options: io_parallel/io_stream
 

@@ -1,0 +1,44 @@
+AcceleratorConfig:
+  Board: alveo-u50
+  Driver: c
+  Interface: axi_stream
+  Platform: xilinx_u250_xdma_201830_2
+  Precision:
+    Input: float
+    Output: float
+Backend: VivadoAccelerator
+ClockPeriod: 5
+HLSConfig:
+  LayerName:
+    batch_normalization:
+      Trace: true
+    fc1:
+      Precision: ap_fixed<22,14>
+      Trace: true
+    fc1_input:
+      Precision: ap_fixed<12,12>
+      Trace: true
+    fc1_linear:
+      Precision: ap_fixed<22,14>
+      Trace: true
+    fc2:
+      Trace: true
+    relu1:
+      Precision: ap_ufixed<5,2,AP_RND,AP_SAT>
+      Trace: true
+    relu2:
+      Precision: ap_ufixed<5,2,AP_RND,AP_SAT>
+      Trace: true
+  Model:
+    Precision: ap_fixed<16,6>
+    ReuseFactor: 75
+    Strategy: resource
+IOType: io_stream
+InputData: null
+KerasModel: !keras_model 'keras/test/keras_model.h5'
+OutputDir: keras/test
+OutputPredictions: null
+Part: xcu50-fsvh2104-2-e
+ProjectName: myproject
+Stamp: cFdc3eF1
+Version: 1.0.0

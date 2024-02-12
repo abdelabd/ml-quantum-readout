@@ -1,0 +1,34 @@
+Backend: Vivado
+ClockPeriod: 3.225
+HLSConfig:
+  LayerName:
+    batch_normalization:
+      Precision:
+        bias: ap_fixed<16,4>
+        result: ap_fixed<6,4>
+        scale: ap_fixed<16,4>
+      Trace: true
+    fc1:
+      Precision:
+        result: ap_fixed<16,16>
+      Trace: true
+      accum_t: ap_fixed<16,16>
+    fc1_input:
+      Precision: ap_fixed<14,14>
+      Trace: true
+    fc1_linear:
+      Precision:
+        result: ap_fixed<16,16>
+      Trace: true
+  Model:
+    Precision: ap_fixed<16,6>
+    ReuseFactor: 1
+IOType: io_parallel
+InputData: null
+KerasModel: !keras_model 'hls4ml_qkeras_v3_match_prj//keras_model.h5'
+OutputDir: hls4ml_qkeras_v3_match_prj/
+OutputPredictions: null
+Part: xczu49dr-ffvf1760-2-e
+ProjectName: myproject
+Stamp: 83a1436D
+Version: 1.0.0

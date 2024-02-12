@@ -8,21 +8,14 @@ from torch import nn, optim
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import numpy as np
-import argparse
-
-parser = argparse.ArgumentParser()
-parser.add_argument('--start', type=int)
-parser.add_argument('--window', type=int)
-args = parser.parse_args()
-
 
 # Hyper-Parameters
 torch.manual_seed(4)
-epochs = 5
+epochs = 20
 batch_size = 12800
-learning_rate = 1e-2
+learning_rate = 1e-4
 
-device = torch.device("cpu")
+device = torch.device("cuda")
 kwargs = {'num_workers':0, 'pin_memory': True} 
 plot_interval = 1
 
@@ -30,8 +23,7 @@ plot_interval = 1
 
 # Load the raw data
 IF = -136.75/1e3
-# csr = range(335-50,335+50)  # ORIGINAL 
-csr = range(args.start, args.start+args.window)
+csr = range(335-50,335+50)
 sr = len(csr)
 
 class Qubit_Readout_Dataset(torch.utils.data.Dataset):
@@ -79,17 +71,11 @@ class Classifier(nn.Module):
         super(Classifier, self).__init__()
 
         self.hn = sr*2 * 1
-        self.classifier = nn.Sequential(
-            nn.Linear(sr*2, int(self.hn/8)),
-            nn.ReLU(inplace=True),
-            nn.BatchNorm1d(int(self.hn/8),affine=False),
-            nn.Linear(int(self.hn/8), 2),
-            nn.ReLU(inplace=True)
-        )
-        # self.classifier = nn.Sequential(
-        #     nn.Linear(sr*2, 2),
-        #     nn.BatchNorm1d(2,affine=False)
-        # )
+        self.classifier = nn.Sequential(nn.Linear(sr*2, int(self.hn/8)),
+                                    nn.ReLU(inplace=True),
+                                    nn.BatchNorm1d(int(self.hn/8),affine=False),
+                                    nn.Linear(int(self.hn/8), 2),
+                                    nn.ReLU(inplace=True),)
 
     def forward(self, sig):
         state = self.classifier(sig)
@@ -99,13 +85,6 @@ class Classifier(nn.Module):
 model = Classifier().to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr = learning_rate)
-
-print('###################################')
-print(model)
-print('###################################')
-import torchinfo
-torchinfo.summary(model, input_size=(1, sr*2))
-print('###################################')
 
 # Indices
 all_indices = np.arange(10000)
@@ -124,7 +103,7 @@ for epoch in tqdm(range(epochs)):
     acc_epoch = [] # List to store accuracies of all files in this epoch
     
     for i in tqdm(range(1, 101)): # Loop over files
-        file_name = f'../data/{str(i).zfill(5)}_ge_RAW_ADC.h5' # Generates '00001', '00002', ..., '00100'
+        file_name = f'data/{str(i).zfill(5)}_ge_RAW_ADC.h5' # Generates '00001', '00002', ..., '00100'
 
         dataset = Qubit_Readout_Dataset(file_name)
         
@@ -191,18 +170,13 @@ for epoch in tqdm(range(epochs)):
     # Print the maximum accuracy so far
     print('====> Epoch: {} Maximum Readout Fidelity: {:.2f}%'.format(epoch, np.max(acc_history) * 100))
 
-p1, p2 = 0, -1
-plt.figure(0)
-plt.plot(train_loss_track[p1:p2],label = 'Training')
-plt.plot(test_loss_track[p1:p2],label='Testing')
-plt.legend()
-plt.xlabel('Epochs')
-plt.title("Training - Test Loss")
-plt.figure(figsize = (12,7))
-# plt.show()
-# plt.savefig(f'results/test-loss_s{args.start}_w{args.window}.png')
-plt.close()
+    p1, p2 = 0, -1
+    plt.plot(train_loss_track[p1:p2],label = 'Training')
+    plt.plot(test_loss_track[p1:p2],label='Testing')
+    plt.legend()
+    plt.xlabel('Epochs')
+    plt.title("Training - Test Loss")
+    plt.figure(figsize = (12,7))
+    plt.show()
 
-f = open(f"results/log-{args.window}.txt", "a")
-f.write(f"{args.start}-{args.window}-{avg_accuracy}\n")
-f.close()
+

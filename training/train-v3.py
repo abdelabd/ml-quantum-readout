@@ -96,14 +96,14 @@ def load_checkpoint(args, filename):
 
 def get_keras_model():
     model = Sequential()
-    model.add(Dense(2, input_shape=(200,), name='fc1'))
+    model.add(Dense(2, input_shape=(1540,), name='fc1'))
     model.add(BatchNormalization())
     return model
 
 
 def get_qkeras_model(args):
     model = Sequential()
-    model.add(QDense(2, input_shape=(200,), name='fc1', kernel_quantizer=quantized_bits(6,0,alpha=1), bias_quantizer=quantized_bits(6,0,alpha=1),))
+    model.add(QDense(2, input_shape=(1540,), name='fc1', kernel_quantizer=quantized_bits(6,0,alpha=1), bias_quantizer=quantized_bits(6,0,alpha=1),))
     model.add(BatchNormalization())
     if args.prune:
         pruning_params = {"pruning_schedule": pruning_schedule.ConstantSparsity(0.70, begin_step=200, frequency=100)}
