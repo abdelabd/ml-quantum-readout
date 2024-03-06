@@ -56,7 +56,7 @@ class Qubit_Readout_Dataset(object):
         return self
 
 
-def process_data(start_window, end_window, data_dir):
+def process_data(start_window, end_window, data_in, data_out):
     ### Load and Prepare the Data ###
 
     # Load the raw data
@@ -70,7 +70,7 @@ def process_data(start_window, end_window, data_dir):
 
     # Data loop
     for i in tqdm(range(0, 101)): # Loop over files
-        file_name = f'{data_dir}/{str(i).zfill(5)}_ge_RAW_ADC.h5' # Generates 00000, '00001', '00002', ..., '00100'
+        file_name = f'{data_in}/{str(i).zfill(5)}_ge_RAW_ADC.h5' # Generates 00000, '00001', '00002', ..., '00100'
         if dataset:
             dataset += Qubit_Readout_Dataset(file_name, csr, sr)
         else: 
@@ -91,21 +91,24 @@ def process_data(start_window, end_window, data_dir):
     #######################################
     # Digitize into npy arrays 
     #######################################
-    np.save(os.path.join(data_dir, 'X_train.npy'), X_train)
-    np.save(os.path.join(data_dir, 'y_train.npy'), y_train)
-    np.save(os.path.join(data_dir, 'X_test.npy'), X_test)
-    np.save(os.path.join(data_dir, 'y_test.npy'), y_test)
+    os.makedirs(data_out, exist_ok=True)
+    np.save(os.path.join(data_out, 'X_train.npy'), X_train)
+    np.save(os.path.join(data_out, 'y_train.npy'), y_train)
+    np.save(os.path.join(data_out, 'X_test.npy'), X_test)
+    np.save(os.path.join(data_out, 'y_test.npy'), y_test)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--start-window', type=int, default=0)
     parser.add_argument('-e', '--end-window', type=int, default=770)
-    parser.add_argument('-d', '--data-dir', type=str, default='../data/')
+    parser.add_argument('-di', '--data-in', type=str, default='../data/raw-data')
+    parser.add_argument('-do', '--data-out', type=str, default='../data/data_-1')
     args = parser.parse_args()
 
     process_data(
-        data_dir=args.data_dir,
+        data_in=args.data_in,
+        data_out=args.data_out,
         start_window=args.start_window,
         end_window=args.end_window,
     )
