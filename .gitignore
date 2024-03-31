@@ -159,3 +159,15 @@ notebooks/3*
 tmp*/
 hls4ml_prj/
 *wrapper/
+
+# Useless or not worth having on github
+data/Inspect data.ipynb
+notebooks/Labeling Excitation and Relaxation Errors - KMeans.ipynb
+notebooks/Qubit Readout Suite - Full time-average.ipynb
+notebooks/test.py
+*.jou
+notebooks/*.pkl
+notebooks/QICK demo thresholding - Optimal Window.ipynb
+notebooks/Qubit Readout Suite -  Full time-average.ipynb
+notebooks/new_train_test_split.ipynb
+notebooks/scatter_all.ipynb
