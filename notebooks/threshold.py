@@ -1,6 +1,7 @@
 # See: https://github.com/openquantumhardware/qick/blob/main/qick_demos/06_qubit_demos.ipynb
 
 import numpy as np
+import json
 
 class ThresholdModel(object):
     def __init__(self):
@@ -69,6 +70,20 @@ class ThresholdModel(object):
         # Discriminate based on threshold
         qubit_states = np.array(X_I_prime > self.threshold, dtype=int)
         return qubit_states
+
+    def save(self, fpath):
+        assert '.json' in fpath
+        save_dict = {"theta": self.theta, "threshold": self.threshold}
+        with open(fpath, "w") as f:
+            json.dump(save_dict, f)
+
+    def load(self, fpath):
+        assert '.json' in fpath
+        with open(fpath, 'r') as f:
+            load_dict = json.load(f)
+        self.theta = load_dict['theta']
+        self.threshold = load_dict['threshold']
+            
 
     def split_and_time_average(self, X):
         # X: [N_SAMPLES, TIMESERIES_LENGTH]
