@@ -172,3 +172,7 @@ notebooks/Qubit Readout Suite -  Full time-average.ipynb
 notebooks/new_train_test_split.ipynb
 notebooks/scatter_all.ipynb
 notebooks/transition_errors
+notebooks/classify_errors_binary.ipynb
+notebooks/classify_errors_conv.ipynb
+notebooks/classify_errors_iterate.ipynb
+notebooks/transition_errors_conv/
