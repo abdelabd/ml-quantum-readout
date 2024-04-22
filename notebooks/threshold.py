@@ -57,7 +57,7 @@ class ThresholdModel(object):
         self.threshold = bin_edges_0[tind]
         ###################################
     
-    def predict(self, X):
+    def predict(self, X, verbose = False):
         if self.theta == None:
             raise NotImplementedError("Model has not been trained yet")
 
