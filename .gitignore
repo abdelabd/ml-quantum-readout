@@ -176,3 +176,7 @@ notebooks/classify_errors_binary.ipynb
 notebooks/classify_errors_conv.ipynb
 notebooks/classify_errors_iterate.ipynb
 notebooks/transition_errors_conv/
+notebooks/models
+notebooks/workflow_shifted_cnn1d.ipynb
+notebooks/mf.py
+notebooks/simulating_trajectories
