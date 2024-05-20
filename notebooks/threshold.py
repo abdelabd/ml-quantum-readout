@@ -73,7 +73,7 @@ class ThresholdModel(object):
 
     def save(self, fpath):
         assert '.json' in fpath
-        save_dict = {"theta": self.theta, "threshold": self.threshold}
+        save_dict = {"theta": str(self.theta), "threshold": str(self.threshold)}
         with open(fpath, "w") as f:
             json.dump(save_dict, f)
 
@@ -81,8 +81,8 @@ class ThresholdModel(object):
         assert '.json' in fpath
         with open(fpath, 'r') as f:
             load_dict = json.load(f)
-        self.theta = load_dict['theta']
-        self.threshold = load_dict['threshold']
+        self.theta = np.float(load_dict['theta'])
+        self.threshold = np.float(load_dict['threshold'])
             
 
     def split_and_time_average(self, X):
