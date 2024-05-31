@@ -180,3 +180,4 @@ notebooks/models
 notebooks/workflow_shifted_cnn1d.ipynb
 notebooks/mf.py
 notebooks/simulating_trajectories
+data/simulated_data
